@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Universe</title>
+
+    <style>
+        :root {
+            --accent: #ffcc00;
+            --bg-dark: #0f0f1a;
+            --card-bg: #2b2b44;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, var(--bg-dark), #1f1f38);
+            color: white;
+            text-align: center;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        section {
+            padding: 80px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 { color: var(--accent); font-size: 2.5rem; margin-bottom: 20px; }
+
+        button, .btn-link {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #e6b800; transform: translateY(-2px); }
+
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .card:hover { transform: scale(1.05); background: #3a3a5e; }
+
+        .card img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .info-tag { font-size: 13px; color: var(--accent); margin: 10px 0; font-weight: bold; }
+
+        /* SIDE PANEL STYLES */
+        .side-panel {
+            position: fixed;
+            right: -450px; /* Hidden by default */
+            top: 0;
+            width: 400px;
+            height: 100%;
+            background: rgba(15, 15, 26, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 40px 30px;
+            text-align: left;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .side-panel.active { right: 0; }
+
+        .close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--accent);
+            float: right;
+        }
+
+        .watch-links {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .watch-btn {
+            display: block;
+            padding: 12px;
+            text-align: center;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .watch-btn.netflix { background: #E50914; }
+        .watch-btn.crunchy { background: #F47521; }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            z-index: 999;
+        }
+        .overlay.active { display: block; }
+    </style>
+</head>
+
+<body>
+
+<div class="overlay" id="overlay" onclick="closePanel()"></div>
+
+<section id="home">
+    <h1>🎌 Anime Universe</h1>
+    <p>The ultimate archive of legendary stories.</p>
+    <a href="#start" class="btn-link">🔗 Enter Website</a>
+</section>
+
+<section id="start">
+    <h1>Ready to Explore?</h1>
+    <button onclick="location.href='#about'">Submit / Get Started</button>
+</section>
+
+<section id="about">
+    <h1>About This Archive</h1>
+    <p style="max-width: 600px; line-height: 1.6;">
+        Explore a curated collection of 100 legendary titles. 
+        Click on any anime to view high-quality details, summaries, and official streaming platforms.
+    </p>
+    <button onclick="location.href='#anime'">Start Viewing Anime</button>
+</section>
+
+<section id="anime">
+    <h1>🌟 Top Anime Collection</h1>
+    <div class="anime-grid">
+        
+        <div class="card" onclick="openPanel('Dragon Ball Z', '1989 | Action | Eps: 291', 'Goku and his friends defend Earth from intergalactic threats in this genre-defining Shonen classic.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+            <img src="dragon.webp" alt="DBZ">
+            <h3>Dragon Ball Z</h3>
+            <div class="info-tag">8.8 Rating</div>
+        </div>
+
+        <div class="card" onclick="openPanel('Solo Leveling', '2024 | Action/Fantasy | Eps: 12+', 'Sung Jin-woo, an E-rank hunter, discovers a secret system that allows him to level up alone.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+            <img src="sl.jpg" alt="Solo Leveling">
+            <h3>Solo Leveling</h3>
+            <div class="info-tag">9.9 Rating</div>
+        </div>
+
+        <div class="card" onclick="openPanel('Naruto', '1999 | Ninja | Eps: 220', 'Naruto Uzumaki seeks recognition from his village and dreams of becoming the Hokage.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+            <img src="naruto.jpeg" alt="Naruto">
+            <h3>Naruto</h3>
+            <div class="info-tag">8.4 Rating</div>
+        </div>
+
+        <div class="card" onclick="openPanel('The Tunnel to Summer', '2022 | Sci-Fi/Romance | Movie', 'Two students investigate the mysterious Urashima Tunnel, which grants wishes at a heavy price.', 'https://www.netflix.com', '#')">
+            <img src="st.jpeg" alt="Tunnel to Summer">
+            <h3>The Tunnel to Summer</h3>
+            <div class="info-tag">7.3 Rating</div>
+        </div>
+        <div class="card" onclick="openPanel('One Piece', '1999 | Adventure | Eps: 1100+', 'Monkey D. Luffy sets sail to find the ultimate treasure and become King of the Pirates.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="ONE.jpg" alt="One Piece">
+    <h3>One Piece</h3>
+    <div class="info-tag">9.0 Rating</div>
+</div>
+
+<div class="card" onclick="openPanel('Death Note', '2006 | Thriller | Eps: 37', 'A high school student discovers a supernatural notebook that allows him to kill anyone by writing their name.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="death.jpeg" alt="Death Note">
+    <h3>Death Note</h3>
+    <div class="info-tag">9.0 Rating</div>
+</div>
+
+<div class="card" onclick="openPanel('Attack on Titan', '2013 | Dark Fantasy | Eps: 88', 'After his hometown is destroyed, Eren Yeager vows to cleanse the earth of the giant humanoid Titans.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="aot.jpg" alt="AOT">
+    <h3>Attack on Titan</h3>
+    <div class="info-tag">9.1 Rating</div>
+</div>
+
+<div class="card" onclick="openPanel('Demon Slayer', '2019 | Action | Eps: 55+', 'Tanjiro Kamado sets out to become a demon slayer after his family is slaughtered and his sister turned into a demon.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="demon.jpg" alt="Demon Slayer">
+    <h3>Demon Slayer</h3>
+    <div class="info-tag">8.7 Rating</div>
+</div>
+
+<div class="card" onclick="openPanel('Jujutsu Kaisen', '2020 | Supernatural | Eps: 47+', 'Yuji Itadori swallows a cursed finger to save his friends, becoming the host of the King of Curses.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="jjk.jpg" alt="JJK">
+    <h3>Jujutsu Kaisen</h3>
+    <div class="info-tag">8.8 Rating</div>
+</div>
+
+
+<div class="card" onclick="openPanel('Hunter x Hunter', '2011 | Adventure | Eps: 148', 'Gon Freecss seeks to become a Hunter to find his father, who abandoned him to pursue his own dreams.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="hh.png" alt="HxH">
+    <h3>Hunter x Hunter</h3>
+    <div class="info-tag">9.0 Rating</div>
+</div>
+
+<div class="card" onclick="openPanel('Bleach', '2004 | Supernatural | Eps: 366', 'Ichigo Kurosaki gains the powers of a Soul Reaper and must protect the living world from evil spirits.', 'https://www.disneyplus.com', 'https://www.crunchyroll.com')">
+    <img src="Bleachanime.png" alt="Bleach">
+    <h3>Bleach</h3>
+    <div class="info-tag">8.2 Rating</div>
+</div>
+                             
+<div class="card" onclick="openPanel('My Hero Academia', '2016 | Superhero | Eps: 150+', 'In a world where 80% of people have superpowers, a powerless boy inherits the world’s greatest power.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="mya.jpg" alt="MHA">
+    <h3>My Hero Academia</h3>
+    <div class="info-tag">8.3 Rating</div>
+</div>
+
+
+<div class="card" onclick="openPanel('Chainsaw Man', '2022 | Action/Gore | Eps: 12', 'A debt-ridden young man merges with his chainsaw-dog pet to become a lethal Devil Hunter.', 'https://www.hulu.com', 'https://www.crunchyroll.com')">
+    <img src="chainsaw-man-vol-1-9781974709939_lg.jpg" alt="CSM">
+    <h3>Chainsaw Man</h3>
+    <div class="info-tag">8.5 Rating</div>
+</div>
+
+<div class="card" onclick="openPanel('Spy x Family', '2022 | Comedy/Spy | Eps: 37+', 'A spy creates a fake family to fulfill a mission, unaware his wife is an assassin and his daughter a telepath.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="spy.jpg" alt="Spy">
+    <h3>Spy x Family</h3>
+    <div class="info-tag">8.4 Rating</div>
+</div>
+
+<div class="card" onclick="openPanel('Your Name', '2016 | Romance | Movie', 'Two teenagers share a profound, magical connection upon discovering they are swapping bodies.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="your name.jpeg" alt="Your Name">
+    <h3>Your Name</h3>
+    <div class="info-tag">8.4 Rating</div>
+</div>
+
+
+<div class="card" onclick="openPanel('Black Clover', '2017 | Fantasy | Eps: 170', 'Asta, a boy born without magic in a world where magic is everything, aims to become the Wizard King.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="black.jpg" alt="Black Clover">
+    <h3>Black Clover</h3>
+    <div class="info-tag">8.3 Rating</div>
+</div>
+
+<div class="card" onclick="openPanel('Tokyo Ghoul', '2014 | Dark Fantasy | Eps: 24', 'A college student becomes a half-ghoul after surviving an encounter with one, struggling to fit into both worlds.', 'https://www.netflix.com', 'https://www.crunchyroll.com')">
+    <img src="tyg.jpg" alt="Tokyo Ghoul">
+    <h3>Tokyo Ghoul</h3>
+    <div class="info-tag">7.8 Rating</div>
+</div>
+
+
+    </div>
+</section>
+
+<div class="side-panel" id="panel">
+    <span class="close-btn" onclick="closePanel()">✖</span>
+    <h2 id="pTitle" style="color: var(--accent); margin-top: 20px;"></h2>
+    <div id="pMeta" style="color: #aaa; font-style: italic; margin-bottom: 20px;"></div>
+    <p id="pDesc" style="line-height: 1.6;"></p>
+    
+    <h3>Watch Now:</h3>
+    <div class="watch-links">
+        <a href="#" id="linkNetflix" target="_blank" class="watch-btn netflix">Netflix</a>
+        <a href="#" id="linkCrunchy" target="_blank" class="watch-btn crunchy">Crunchyroll</a>
+        <a href="#" target="_blank" class="watch-btn">Anilab</a>
+    </div>
+</div>
+
+<script>
+    function openPanel(title, meta, desc, netflixUrl, crunchyUrl) {
+        document.getElementById("pTitle").innerText = title;
+        document.getElementById("pMeta").innerText = meta;
+        document.getElementById("pDesc").innerText = desc;
+        document.getElementById("linkNetflix").href = netflixUrl;
+        document.getElementById("linkCrunchy").href = crunchyUrl;
+
+        document.getElementById("panel").classList.add("active");
+        document.getElementById("overlay").classList.add("active");
+    }
+
+    function closePanel() {
+        document.getElementById("panel").classList.remove("active");
+        document.getElementById("overlay").classList.remove("active");
+    }
+</script>
+
+</body>
+</html>
